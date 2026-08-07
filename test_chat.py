@@ -1,6 +1,9 @@
 import sys
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Fix for windows terminal emoji printing
 if sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
@@ -27,14 +30,6 @@ def main():
     print(f"📡 Canlı Data Simulyasiyası: Tıxac {fake_stats['congestion_pct']}%, Hava: {fake_stats['weather_cond']} ({fake_stats['temp']}°C), Qəza: {fake_stats['incident_count']}")
     print("----------------------------------------")
     
-    # Read API Key from .env manually if needed or assume it's set
-    from dotenv import load_dotenv
-    load_dotenv()
-    
-    if not os.getenv("GEMINI_API_KEY"):
-        print("XƏTA: GEMINI_API_KEY tapılmadı. Zəhmət olmasa .env faylında qeyd edin.")
-        return
-
     # Simulate inputs for automated testing since we can't interactively use input() easily
     test_queries = [
         "Salam, Ziya Bünyadov prospektində vəziyyət necədir?",

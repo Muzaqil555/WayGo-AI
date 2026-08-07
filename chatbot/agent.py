@@ -28,7 +28,7 @@ def get_or_create_chat(session_id: str):
     """Verilmiş session_id üçün yaddaşı olan chat obyekti qaytarır və ya yaradır"""
     if session_id not in sessions:
         model = genai.GenerativeModel(
-            model_name='gemini-1.5-flash',
+            model_name='gemini-2.5-flash',
             system_instruction=SYSTEM_INSTRUCTION
         )
         sessions[session_id] = model.start_chat(history=[])
