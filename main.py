@@ -21,6 +21,7 @@ app.add_middleware(
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: str = "default_user"
     congestion_pct: int = 0
     avg_speed: float = 0.0
     active_vehicles: int = 0
@@ -48,7 +49,7 @@ async def chat_endpoint(request: ChatRequest):
             "anomaly_count": request.anomaly_count
         }
         
-        reply_text = process_chat(request.message, stats)
+        reply_text = process_chat(request.message, stats, request.session_id)
         return ChatResponse(reply=reply_text)
         
     except Exception as e:
