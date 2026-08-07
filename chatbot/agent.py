@@ -27,6 +27,9 @@ SYSTEM_INSTRUCTION = """Sən 'WayGo Smart AI' - Bakı şəhəri üçün xüsusi 
 ### 4. SƏRHƏDLƏR (GUARDRAILS) - ÇOX ÖNƏMLİ:
 - Sən YALNIZ yol, tıxac, nəqliyyat, naviqasiya və avtomobillərlə bağlı suallara cavab verirsən.
 - Əgər istifadəçi kənar mövzularda (siyasət, resept, kodlaşdırma, tarix və s.) sual soruşarsa, ÇOX NƏZAKƏTLƏ bildir ki, sən yalnız WayGo naviqasiya ekspertisən və kənar mövzulara cavab vermirsən.
+
+### 5. ÇOXDİLLİ DƏSTƏK (MULTI-LANGUAGE):
+- Əgər istifadəçi səninlə İngilis (English) və ya Rus (Русский) dilində danışarsa, sən də avtomatik olaraq həmin dildə cavab ver. Şüarları (Yolunuz açıq olsun) da həmin dilə uyğunlaşdır.
 """
 
 def get_or_create_chat(session_id: str):
@@ -61,7 +64,23 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user") ->
         )
         
         final_message = context_str + "İstifadəçi mesajı: " + message
-        response = chat.send_message(final_message)
+        
+        # Sığorta (Retry Logic): İnternet və ya API xətası olarsa 3 dəfəyədək yenidən yoxla
+        import time
+        for attempt in range(3):
+            try:
+                response = chat.send_message(final_message)
+                break
+            except Exception as e:
+                if attempt == 2:
+                    raise e
+                time.sleep(1.0)
+                
+        # Yaddaşın idarəolunması (Memory Leak-in qarşısını almaq): Yalnız son 10 dialoqu saxla
+        while len(chat.history) > 10:
+            chat.history.pop(0) # İstifadəçi mesajını sil
+            chat.history.pop(0) # Model mesajını sil
+            
         return response.text
     except Exception as e:
         print(f"AI Error: {str(e)}")
@@ -88,13 +107,24 @@ def stream_chat(message: str, stats: dict, session_id: str = "default_user"):
         
         # Alətlərdən istifadə üçün automatic function calling aktiv edirik
         # Streaming əvəzinə tam cavabı alıb sonra sürətlə axın edirik (fake stream)
-        response = chat.send_message(
-            final_message, 
-            stream=False
-        )
+        # Sığorta (Retry Logic) əlavə edildi
+        import time
+        response = None
+        for attempt in range(3):
+            try:
+                response = chat.send_message(final_message, stream=False)
+                break
+            except Exception as e:
+                if attempt == 2:
+                    raise e
+                time.sleep(1.0)
+        
+        # Yaddaşın idarəolunması (Memory Leak): Yalnız son 10 dialoqu saxla
+        while len(chat.history) > 10:
+            chat.history.pop(0) # İstifadəçi mesajını sil
+            chat.history.pop(0) # Model mesajını sil
         
         # Əgər function çağırılıbsa SDK avtomatik həll edir
-        import time
         text = response.text if response.text else ""
         for word in text.split(' '):
             yield word + ' '
