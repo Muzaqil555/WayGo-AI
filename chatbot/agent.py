@@ -27,11 +27,16 @@ Qaydalar və Məntiq (AI Logic):
 def get_or_create_chat(session_id: str):
     """Verilmiş session_id üçün yaddaşı olan chat obyekti qaytarır və ya yaradır"""
     if session_id not in sessions:
+        from chatbot.tools import predict_future_traffic, find_optimal_route
         model = genai.GenerativeModel(
             model_name='gemini-flash-lite-latest',
-            system_instruction=SYSTEM_INSTRUCTION
+            system_instruction=SYSTEM_INSTRUCTION,
+            tools=[predict_future_traffic, find_optimal_route]
         )
-        sessions[session_id] = model.start_chat(history=[])
+        sessions[session_id] = model.start_chat(
+            history=[], 
+            enable_automatic_function_calling=True
+        )
     return sessions[session_id]
 
 def process_chat(message: str, stats: dict, session_id: str = "default_user") -> str:
@@ -76,11 +81,19 @@ def stream_chat(message: str, stats: dict, session_id: str = "default_user"):
         
         final_message = context_str + "İstifadəçi mesajı: " + message
         
-        # stream=True ilə modelin cavabı parçalarla (hissə-hissə) gəlir
-        response = chat.send_message(final_message, stream=True)
-        for chunk in response:
-            if chunk.text:
-                yield chunk.text
+        # Alətlərdən istifadə üçün automatic function calling aktiv edirik
+        # Streaming əvəzinə tam cavabı alıb sonra sürətlə axın edirik (fake stream)
+        response = chat.send_message(
+            final_message, 
+            stream=False
+        )
+        
+        # Əgər function çağırılıbsa SDK avtomatik həll edir
+        import time
+        text = response.text if response.text else ""
+        for word in text.split(' '):
+            yield word + ' '
+            time.sleep(0.01)
     except Exception as e:
         print(f"AI Error: {str(e)}")
         yield f"\n[Xəta baş verdi: {str(e)}]"
