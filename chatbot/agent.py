@@ -35,14 +35,37 @@ def get_or_create_chat(session_id: str):
     return sessions[session_id]
 
 def process_chat(message: str, stats: dict, session_id: str = "default_user") -> str:
-    """LLM modelinə canlı statistika ilə zənginləşdirilmiş sorğu göndərib cavabı qaytarır"""
+    """LLM modelinə canlı statistika ilə zənginləşdirilmiş sorğu göndərib tam cavabı qaytarır (Gecikir)"""
     if not api_key:
         return "⚠️ Təəssüf ki, AI mühərriki hazırda oflayndır (API Key tapılmadı)."
         
     try:
         chat = get_or_create_chat(session_id)
         
-        # Dinamik kontekst: İstifadəçinin mesajının əvvəlinə görünməz statistika əlavə edirik
+        context_str = (
+            f"[SİSTEM MƏLUMATI (Yalnız sənin üçün): "
+            f"Tıxac: {stats.get('congestion_pct', 0)}%, "
+            f"Sürət: {stats.get('avg_speed', 0):.0f} km/s, "
+            f"Hava: {stats.get('weather_cond', 'Bilinmir')}, {stats.get('temp', 0):.1f}°C, "
+            f"Qəzalar: {stats.get('incident_count', 0)}]\n"
+        )
+        
+        final_message = context_str + "İstifadəçi mesajı: " + message
+        response = chat.send_message(final_message)
+        return response.text
+    except Exception as e:
+        print(f"AI Error: {str(e)}")
+        raise e
+
+def stream_chat(message: str, stats: dict, session_id: str = "default_user"):
+    """LLM modelindən cavabı söz-söz (streaming) qaytarır ki, istifadəçi gözləməsin"""
+    if not api_key:
+        yield "⚠️ Təəssüf ki, AI mühərriki hazırda oflayndır (API Key tapılmadı)."
+        return
+        
+    try:
+        chat = get_or_create_chat(session_id)
+        
         context_str = (
             f"[SİSTEM MƏLUMATI (Yalnız sənin üçün): "
             f"Tıxac: {stats.get('congestion_pct', 0)}%, "
@@ -53,8 +76,11 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user") ->
         
         final_message = context_str + "İstifadəçi mesajı: " + message
         
-        response = chat.send_message(final_message)
-        return response.text
+        # stream=True ilə modelin cavabı parçalarla (hissə-hissə) gəlir
+        response = chat.send_message(final_message, stream=True)
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
     except Exception as e:
         print(f"AI Error: {str(e)}")
-        raise e
+        yield f"\n[Xəta baş verdi: {str(e)}]"

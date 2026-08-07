@@ -8,7 +8,7 @@ load_dotenv()
 if sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
     
-from chatbot.agent import process_chat
+from chatbot.agent import stream_chat
 
 def main():
     print("========================================")
@@ -37,11 +37,13 @@ def main():
                 print("Test mühiti bağlandı.")
                 break
                 
-            print("⏳ AI Düşünür...")
-            reply = process_chat(user_input, fake_stats, session_id="test_engineer_1")
+            print("WayGo AI: ", end='', flush=True)
             
-            print(f"\nWayGo AI:\n{reply}")
-            print("-" * 40)
+            # Streaming cavabı alırıq və gələn kimi ekrana yazdırırıq
+            for chunk in stream_chat(user_input, fake_stats, session_id="test_engineer_1"):
+                print(chunk, end='', flush=True)
+                
+            print("\n" + "-" * 40)
             
         except Exception as e:
             print(f"\nXəta baş verdi: {e}")
