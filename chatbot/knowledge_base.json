@@ -1,0 +1,32 @@
+{
+    "roads": [
+        {
+            "name": "Heydər Əliyev prospekti",
+            "speed_limit_kmh": 110,
+            "has_radar": true,
+            "radar_locations": ["Koroğlu metrosu yaxınlığı", "Hava limanı yolu"],
+            "notes": "Mərkəzə doğru hərəkət edərkən köməkçi yollarda sürət 60 km/s-dir."
+        },
+        {
+            "name": "Ziya Bünyadov prospekti",
+            "speed_limit_kmh": 90,
+            "has_radar": true,
+            "radar_locations": ["Xutor dairəsi", "Dərnəgül yolu"],
+            "notes": "Pik saatlarda mütəmadi olaraq çox sıx olur."
+        },
+        {
+            "name": "Neftçilər prospekti",
+            "speed_limit_kmh": 60,
+            "has_radar": true,
+            "radar_locations": ["Dənizkənarı Milli Park", "Azneft dairəsi"],
+            "notes": "Piyada keçidlərinə xüsusi diqqət yetirilməlidir."
+        },
+        {
+            "name": "Tbilisi prospekti",
+            "speed_limit_kmh": 60,
+            "has_radar": true,
+            "radar_locations": ["Nəqliyyat Nazirliyi qarşısı"],
+            "notes": "Səhər saat 8-10 arası ağır tıxac müşahidə olunur."
+        }
+    ]
+}

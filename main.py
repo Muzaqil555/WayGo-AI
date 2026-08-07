@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Daxili modullar (AI komandası)
-from chatbot.agent import process_chat
+from chatbot.agent import process_chat, stream_chat
+from fastapi.responses import StreamingResponse
 
 app = FastAPI(title="WayGo AI Engine", description="Baku Urban Mobility AI Service")
 
@@ -55,6 +56,28 @@ async def chat_endpoint(request: ChatRequest):
     except Exception as e:
         print(f"API Error: {str(e)}")
         raise HTTPException(status_code=500, detail="AI xətası baş verdi")
+
+@app.post("/api/chat/stream")
+async def chat_stream_endpoint(request: ChatRequest):
+    """
+    Backend və Frontend üçün canlı (hissə-hissə) chat cavabı qaytarır.
+    """
+    stats = {
+        "congestion_pct": request.congestion_pct,
+        "avg_speed": request.avg_speed,
+        "active_vehicles": request.active_vehicles,
+        "weather_cond": request.weather_cond,
+        "temp": request.temp,
+        "incident_count": request.incident_count,
+        "anomaly_count": request.anomaly_count
+    }
+    
+    # Server-Sent Events (SSE) və ya təmiz text axını
+    return StreamingResponse(
+        stream_chat(request.message, stats, request.session_id), 
+        media_type="text/plain"
+    )
+
 
 if __name__ == "__main__":
     import uvicorn
