@@ -30,22 +30,22 @@ def main():
     print(f"📡 Canlı Data Simulyasiyası: Tıxac {fake_stats['congestion_pct']}%, Hava: {fake_stats['weather_cond']} ({fake_stats['temp']}°C), Qəza: {fake_stats['incident_count']}")
     print("----------------------------------------")
     
-    # Simulate inputs for automated testing since we can't interactively use input() easily
-    test_queries = [
-        "Salam, Ziya Bünyadov prospektində vəziyyət necədir?",
-        "Bəs hava şəraiti yollara necə təsir edir?",
-        "Tarixdə ilk avtomobil kim tərəfindən icad edilib?"
-    ]
-    
-    for user_input in test_queries:
-        print(f"\nSiz: {user_input}")
+    while True:
         try:
+            user_input = input("\nSiz: ")
+            if user_input.lower() in ['exit', 'quit', 'çixiş', 'cix']:
+                print("Test mühiti bağlandı.")
+                break
+                
             print("⏳ AI Düşünür...")
             reply = process_chat(user_input, fake_stats, session_id="test_engineer_1")
+            
             print(f"\nWayGo AI:\n{reply}")
             print("-" * 40)
+            
         except Exception as e:
             print(f"\nXəta baş verdi: {e}")
+            break
 
 if __name__ == "__main__":
     main()
