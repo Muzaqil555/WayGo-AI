@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import time
 import warnings
 from datetime import datetime
 
@@ -68,6 +69,8 @@ Aşağıdakı lokal Bakı məlumat bazasını istifadə et:
 - Vacib: Hər yeni marşrut təklif edəndə cavabın SONUNA mütləq bu hüquqi sığorta qeydini əlavə et: 
 *(Qeyd: Məlumatlar AI tərəfindən hesablanıb, lütfən real yol nişanlarına və qaydalarına riayət edin).*
 """
+# RAG məlumatını sistem instruksiyasına inject edirik (.replace() JSON içindəki {} simvollarını qırmır)
+SYSTEM_INSTRUCTION = SYSTEM_INSTRUCTION.replace("{knowledge_base}", knowledge_base)
 
 def get_or_create_chat(session_id: str):
     """Verilmiş session_id üçün yaddaşı olan chat obyekti qaytarır və ya yaradır"""
@@ -108,7 +111,6 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user", us
         final_message = context_str + "İstifadəçi mesajı: " + message
         
         # Sığorta (Retry Logic): İnternet və ya API xətası olarsa 3 dəfəyədək yenidən yoxla
-        import time
         for attempt in range(3):
             try:
                 response = chat.send_message(final_message)
@@ -155,7 +157,6 @@ def stream_chat(message: str, stats: dict, session_id: str = "default_user", use
         # Alətlərdən istifadə üçün automatic function calling aktiv edirik
         # Streaming əvəzinə tam cavabı alıb sonra sürətlə axın edirik (fake stream)
         # Sığorta (Retry Logic) əlavə edildi
-        import time
         response = None
         for attempt in range(3):
             try:
