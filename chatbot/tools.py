@@ -11,10 +11,22 @@ def predict_future_traffic(road_name: str, hours_ahead: int) -> str:
     Returns:
         str: Proqnozlaşdırılmış vəziyyət barədə məlumat.
     """
-    # QEYD: Hazırda bu funksiya ML (Machine Learning) modelinə qoşulmayıb deyə simulyasiya qaytarır.
-    # Növbəti mərhələdə ml_models qovluğundakı əsl AI modelinə burdan sorğu atacağıq.
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from ml_models.predict import predict_congestion
+    from datetime import datetime
     
-    return f"Süni intellekt analizi: {hours_ahead} saat sonra {road_name} ərazisində tıxacın 30% artacağı və hərəkətin çətinləşəcəyi proqnozlaşdırılır."
+    current_hour = datetime.now().hour
+    target_hour = (current_hour + hours_ahead) % 24
+    
+    try:
+        # Hava şəraitini hazırda "Açıq" qəbul edirik, gələcəkdə hava API-dən gələcək.
+        weather_assumption = "Açıq" 
+        predicted_pct = predict_congestion(road=road_name, hour=target_hour, weather=weather_assumption, incidents=0)
+        return f"Süni intellekt analizi (ML): {hours_ahead} saat sonra ({target_hour}:00 radələrində) {road_name} ərazisində tıxacın təqribən {predicted_pct}% olacağı proqnozlaşdırılır."
+    except Exception as e:
+        return f"Proqnoz hesablana bilmədi: {e}"
 
 def find_optimal_route(start_location: str, end_location: str) -> str:
     """
