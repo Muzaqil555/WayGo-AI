@@ -9,6 +9,9 @@ load_dotenv()
 # Daxili modullar (AI komandası)
 from chatbot.agent import process_chat, stream_chat
 from fastapi.responses import StreamingResponse
+from utils.logger import get_logger
+
+logger = get_logger("WayGo-API")
 
 app = FastAPI(title="WayGo AI Engine", description="Baku Urban Mobility AI Service")
 
@@ -40,6 +43,7 @@ async def chat_endpoint(request: ChatRequest):
     """
     Java Backend-dən gələn sorğuları qarşılayır və Chatbot agentinə ötürür.
     """
+    logger.info(f"API request received from session: {request.session_id}")
     try:
         stats = {
             "congestion_pct": request.congestion_pct,
@@ -57,10 +61,11 @@ async def chat_endpoint(request: ChatRequest):
             session_id=request.session_id,
             user_profile=request.user_profile
         )
+        logger.info(f"API successfully generated reply for session: {request.session_id}")
         return ChatResponse(reply=reply_text)
         
     except Exception as e:
-        print(f"API Error: {str(e)}")
+        logger.error(f"API Error (chat_endpoint): {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="AI xətası baş verdi")
 
 @app.post("/api/chat/stream")

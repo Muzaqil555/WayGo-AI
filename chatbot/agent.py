@@ -6,6 +6,12 @@ from datetime import datetime
 # Xəbərdarlıqları gizlədirik ki, terminalda xəta kimi görünməsin
 warnings.filterwarnings("ignore", category=FutureWarning)
 import google.generativeai as genai
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.logger import get_logger
+
+logger = get_logger("Agent")
 
 # Təhlükəsizlik: API key yalnız .env-dən oxunmalıdır
 api_key = os.getenv("GEMINI_API_KEY")
@@ -119,7 +125,7 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user", us
             
         return response.text
     except Exception as e:
-        print(f"AI Error: {str(e)}")
+        logger.error(f"AI Error in process_chat: {str(e)}", exc_info=True)
         raise e
 
 def stream_chat(message: str, stats: dict, session_id: str = "default_user", user_profile: dict = None):
@@ -171,5 +177,5 @@ def stream_chat(message: str, stats: dict, session_id: str = "default_user", use
             yield word + ' '
             time.sleep(0.01)
     except Exception as e:
-        print(f"AI Error: {str(e)}")
+        logger.error(f"AI Error in stream_chat: {str(e)}", exc_info=True)
         yield f"\n[Xəta baş verdi: {str(e)}]"
