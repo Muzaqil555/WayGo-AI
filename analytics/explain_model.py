@@ -67,7 +67,9 @@ def explain_ai():
         data=df_top_15, 
         x='Importance', 
         y='Feature', 
-        palette="viridis"
+        hue='Feature',
+        palette="viridis",
+        legend=False
     )
     
     plt.title("🧠 Süni İntellektin Qərar Xəritəsi (Tıxac Nədən Yaranır?)", fontsize=16, fontweight='bold')
