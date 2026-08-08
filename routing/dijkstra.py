@@ -107,7 +107,7 @@ def calculate_optimal_route(start_node: str, end_node: str, weather: str = "Aç�
                 # Dinamik Ağırlıq (ML Prediction)
                 try:
                     congestion = predict_congestion(road_name, current_hour, weather, incidents=0)
-                except:
+                except Exception:
                     congestion = 0
                     
                 # Tıxac artdıqca, vaxt da artır. Məsələn 100% tıxac vaxtı 2 dəfə (və ya daha çox) artırır
