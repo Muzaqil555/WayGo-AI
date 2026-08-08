@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+import warnings
 from datetime import datetime
+
+# Xəbərdarlıqları gizlədirik ki, terminalda xəta kimi görünməsin
+warnings.filterwarnings("ignore", category=FutureWarning)
 import google.generativeai as genai
 
 # Təhlükəsizlik: API key yalnız .env-dən oxunmalıdır
