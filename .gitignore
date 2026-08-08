@@ -29,5 +29,6 @@ models/*
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs and temporary model info
 logs/
+catboost_info/
