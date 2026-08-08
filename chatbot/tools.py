@@ -39,5 +39,14 @@ def find_optimal_route(start_location: str, end_location: str) -> str:
     Returns:
         str: Məsləhət görülən optimal yol.
     """
-    # Gələcəkdə routing/dijkstra.py bura qoşulacaq
-    return f"Ən optimal yol: {start_location} nöqtəsindən {end_location} nöqtəsinə alternativ olaraq Ziya Bünyadov prospekti ilə getmək vaxta 15 dəqiqə qənaət edəcək."
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from routing.dijkstra import calculate_optimal_route
+    
+    try:
+        # Hava şəraitini hazırda default qəbul edirik, gələcəkdə contextdən gələcək.
+        route_result = calculate_optimal_route(start_location, end_location, weather="Açıq")
+        return route_result
+    except Exception as e:
+        return f"Marşrut hesablanarkən xəta baş verdi: {e}"
