@@ -95,6 +95,34 @@ async def chat_stream_endpoint(request: ChatRequest):
     )
 
 
+@app.get("/")
+async def root():
+    """Layihə haqqında ümumi məlumat."""
+    return {
+        "service": "WayGo AI Engine",
+        "version": "1.0.0",
+        "status": "running",
+        "docs": "/docs"
+    }
+
+@app.get("/health")
+async def health_check():
+    """
+    Kubernetes, AWS və monitoring sistemləri üçün Sağlamlıq Yoxlanışı.
+    Bu endpoint-ə gələn cavab yoxdursa, server çöküb deməkdir.
+    """
+    import os
+    model_path = os.path.join("ml_models", "traffic_model.pkl")
+    model_loaded = os.path.exists(model_path)
+    
+    logger.info("Health check requested.")
+    return {
+        "status": "healthy",
+        "ml_model": "loaded" if model_loaded else "missing",
+        "api": "online"
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     # Backend ilə əlaqə üçün Port 8000-də dinləyirik

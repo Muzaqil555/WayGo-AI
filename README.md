@@ -1,5 +1,12 @@
 # 🚀 WayGo AI — Baku Urban Mobility Intelligence Engine
 
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?logo=fastapi&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google_Gemini-1.5_Pro-orange?logo=google&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-RandomForest-red?logo=scikit-learn&logoColor=white)
+![Accuracy](https://img.shields.io/badge/ML_Accuracy-~90%25_R²-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 > **Bakı şəhərinin ağıllı hərəkət mühərriki.** Gemini AI, Maşın Öyrənməsi (Random Forest) və Dijkstra Alqoritmini birləşdirən, real vaxtlı nəqliyyat tıxac proqnozu, optimallaşdırılmış naviqasiya və danışıq qabiliyyətli AI Agent sistemi.
 
 ---
