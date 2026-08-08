@@ -9,7 +9,19 @@ if sys.stdout.encoding.lower() != 'utf-8':
 
 # Parametrlər
 NUM_RECORDS = 10000
-ROADS = ["Ziya Bünyadov", "Heydər Əliyev", "Neftçilər", "Babək", "Zərdabi"]
+# Bütün yollar - dijkstra.py BAKU_GRAPH-dakı bütün road_name-lər daxil edilib
+ROADS = [
+    "Ziya Bünyadov",
+    "Heydər Əliyev",
+    "Neftçilər",
+    "Babək",
+    "Zərdabi",
+    "Qara Qarayev",
+    "İstiqlaliyyət",
+    "Rəşid Behbudov",
+    "Atatürk",
+    "Tbilisi"
+]
 WEATHER_CONDITIONS = ["Açıq", "Yağışlı", "Qarlı", "Dumanlı"]
 
 def generate_traffic_data(num_records=NUM_RECORDS):

@@ -2,6 +2,7 @@ import os
 import pickle
 import pandas as pd
 import sys
+from datetime import datetime
 
 if sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
@@ -26,10 +27,10 @@ def predict_congestion(road: str, hour: int, weather: str, incidents: int = 0) -
     """
     model = load_model()
     
-    # Bazar günü və ya həftəiçi olduğunu saat/gündən təxmin etmək olar, amma sadələşdirmək üçün 
-    # indiki zamanı bazar ertəsi (0) və iş günü qəbul edirik.
-    day_of_week = 0 
-    is_weekend = 0
+    # Real tarixdən həftənin günü və həftəsonu məlumatını alırıq
+    now = datetime.now()
+    day_of_week = now.weekday()  # 0=Bazar ertəsi, 6=Bazar
+    is_weekend = 1 if day_of_week >= 5 else 0
     
     # Modelin gözlədiyi DataFrame formatı
     input_data = pd.DataFrame([{
