@@ -12,7 +12,8 @@ from ml_models.predict import predict_congestion
 BAKU_GRAPH = {
     "28 May": {
         "Gənclik": ("Heydər Əliyev", 5),
-        "Nizami": ("Zərdabi", 4)
+        "Nizami": ("Zərdabi", 4),
+        "Sahil": ("Neftçilər", 6)
     },
     "Gənclik": {
         "28 May": ("Heydər Əliyev", 5),
@@ -22,31 +23,54 @@ BAKU_GRAPH = {
     "Nərimanov": {
         "Gənclik": ("Ziya Bünyadov", 6),
         "Neftçilər": ("Qara Qarayev", 10),
-        "Xətai": ("Babək", 8)
+        "Xətai": ("Babək", 8),
+        "Koroğlu": ("Ziya Bünyadov", 8)
     },
     "Koroğlu": {
         "Gənclik": ("Ziya Bünyadov", 12),
         "Neftçilər": ("Qara Qarayev", 5),
-        "Hava Yolları": ("Heydər Əliyev", 15)
+        "Hava Yolları": ("Heydər Əliyev", 15),
+        "Nərimanov": ("Ziya Bünyadov", 8)
     },
     "Neftçilər": {
         "Nərimanov": ("Qara Qarayev", 10),
         "Koroğlu": ("Qara Qarayev", 5),
-        "Əhmədli": ("Babək", 7)
+        "Əhmədli": ("Babək", 7),
+        "Sahil": ("Neftçilər", 5)
     },
     "Xətai": {
         "Nərimanov": ("Babək", 8),
-        "Əhmədli": ("Neftçilər", 12) # Prospekt
+        "Əhmədli": ("Neftçilər", 12),
+        "Binəqədi": ("Tbilisi", 14)
     },
     "Əhmədli": {
         "Neftçilər": ("Babək", 7),
-        "Xətai": ("Neftçilər", 12)
+        "Xətai": ("Neftçilər", 12),
+        "Lökbatan": ("Ziya Bünyadov", 18)
     },
     "Nizami": {
-        "28 May": ("Zərdabi", 4)
+        "28 May": ("Zərdabi", 4),
+        "Sahil": ("İstiqlaliyyət", 5),
+        "İçərişəhər": ("Rəşid Behbudov", 6)
+    },
+    "Sahil": {
+        "28 May": ("Neftçilər", 6),
+        "Nizami": ("İstiqlaliyyət", 5),
+        "Neftçilər": ("Atatürk", 5),
+        "İçərişəhər": ("Neftçilər", 7)
+    },
+    "İçərişəhər": {
+        "Nizami": ("Rəşid Behbudov", 6),
+        "Sahil": ("Neftçilər", 7)
     },
     "Hava Yolları": {
         "Koroğlu": ("Heydər Əliyev", 15)
+    },
+    "Binəqədi": {
+        "Xətai": ("Tbilisi", 14)
+    },
+    "Lökbatan": {
+        "Əhmədli": ("Ziya Bünyadov", 18)
     }
 }
 

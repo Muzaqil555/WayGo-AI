@@ -12,7 +12,7 @@
             "speed_limit_kmh": 90,
             "has_radar": true,
             "radar_locations": ["Xutor dairəsi", "Dərnəgül yolu"],
-            "notes": "Pik saatlarda mütəmadi olaraq çox sıx olur."
+            "notes": "Pik saatlarda mütəmadi olaraq çox sıx olur. Hava pisləşəndə ən risqli yollardan biridir."
         },
         {
             "name": "Neftçilər prospekti",
@@ -27,6 +27,69 @@
             "has_radar": true,
             "radar_locations": ["Nəqliyyat Nazirliyi qarşısı"],
             "notes": "Səhər saat 8-10 arası ağır tıxac müşahidə olunur."
+        },
+        {
+            "name": "Qara Qarayev prospekti",
+            "speed_limit_kmh": 80,
+            "has_radar": true,
+            "radar_locations": ["Qara Qarayev metrosu", "8 Noyabr dairəsi"],
+            "notes": "Əhmədli istiqamətinə gedəndə axşam saatları çox sıxlaşır."
+        },
+        {
+            "name": "Babək prospekti",
+            "speed_limit_kmh": 60,
+            "has_radar": false,
+            "radar_locations": [],
+            "notes": "Mərkəz və Xətai rayonu arasında alternativ yol kimi istifadə olunur."
+        },
+        {
+            "name": "Zərdabi prospekti",
+            "speed_limit_kmh": 60,
+            "has_radar": true,
+            "radar_locations": ["Zərdabi - Tbilisi kəsişməsi"],
+            "notes": "Dar küçə olduğundan ağır nəqliyyat üçün uyğun deyil."
+        },
+        {
+            "name": "İstiqlaliyyət küçəsi",
+            "speed_limit_kmh": 40,
+            "has_radar": false,
+            "radar_locations": [],
+            "notes": "Şəhər mərkəzindədir. Dayanma qadağandır. Piyada axını çoxdur."
+        },
+        {
+            "name": "Rəşid Behbudov küçəsi",
+            "speed_limit_kmh": 40,
+            "has_radar": false,
+            "radar_locations": [],
+            "notes": "Dar küçə. Axşam saatları restoran müştəriləri üzündən çox sıxlaşır."
+        },
+        {
+            "name": "Atatürk prospekti",
+            "speed_limit_kmh": 60,
+            "has_radar": true,
+            "radar_locations": ["Sahil bağı yaxınlığı"],
+            "notes": "Dənizkənarı zona. Yay aylarında turist axını üzündən tıxac yaranır."
+        },
+        {
+            "name": "Əliağa Vahid küçəsi",
+            "speed_limit_kmh": 40,
+            "has_radar": false,
+            "radar_locations": [],
+            "notes": "Binəqədi rayonuna gedən alternativ yol."
         }
-    ]
+    ],
+    "traffic_rules": {
+        "peak_hours_morning": "07:30 - 09:30",
+        "peak_hours_evening": "17:00 - 20:00",
+        "speed_cameras_active": "24/7",
+        "alcohol_limit_promille": 0.0,
+        "seatbelt_mandatory": true,
+        "mobile_phone_ban": true
+    },
+    "emergency_numbers": {
+        "police": "102",
+        "ambulance": "103",
+        "fire": "101",
+        "road_patrol": "(*2477)"
+    }
 }

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import warnings
 from datetime import datetime
 
 # Xəbərdarlıqları gizlədirik ki, terminalda xəta kimi görünməsin
 warnings.filterwarnings("ignore", category=FutureWarning)
 import google.generativeai as genai
-import sys
-import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.logger import get_logger
 
