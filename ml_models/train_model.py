@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
-from sklearn.linear_model import SGDRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -40,11 +40,10 @@ def train():
             ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
         ])
         
-    # Online Learning (partial_fit dəstəkləyən) model - SGDRegressor
-    # Hələlik ilk təlim olduğu üçün standart fit edirik, gələcəkdə partial_fit istifadə ediləcək
+    # Yüksək Dəqiqlik üçün Random Forest (Təsadüfi Meşə) alqoritmi
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
-        ('regressor', SGDRegressor(max_iter=1000, tol=1e-3, random_state=42))
+        ('regressor', RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1))
     ])
     
     # Train/Test bölünməsi
