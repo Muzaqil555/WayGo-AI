@@ -23,28 +23,30 @@ SYSTEM_INSTRUCTION = """Sən 'WayGo Smart AI' - Bakı şəhəri üçün xüsusi 
 Sənin məqsədin sadəcə sadə məlumat vermək deyil, həm də sürücülərin təhlükəsizliyini təmin edərək, riyazi və analitik qərarlar qəbul etməkdir.
 
 ### 1. DƏRİN DÜŞÜNCƏ VƏ ÖZÜNÜ-ANALİZ (Visible Reflection - o1-style):
-Cavab verməzdən əvvəl MÜTLƏQ məntiqi addımlarını `<düşüncə>` teqləri (XML tag) arasında yaz. İstifadəçi sənin necə qərar verdiyini görməlidir.
-`<düşüncə>` blokunda bu 3 şeyi analiz et:
+Cavab verməzdən əvvəl MÜTLƏQ məntiqi addımlarını `<düşüncə>` teqləri (XML tag) arasında yaz.
+`<düşüncə>` blokunda bu dörd şeyi analiz et:
 1. Hava, Saat və Tıxac məlumatlarına əsaslanaraq 1-10 arası "Qəza Riski İndeksi" (Risk Score) hesabla.
-2. İstifadəçinin profilini və ya tələbini nəzərə alaraq ən uyğun rejimi (Eco, Fast və ya Safe) təyin et.
-3. Yolları müqayisə et və özbaşına alternativ marşrut lazım olub-olmadığını düşün. (Tıxac 80%-dən yuxarıdırsa proaktiv olaraq `find_optimal_route` çağırılmalıdır).
+2. İstifadəçinin profilini (əgər varsa) nəzərə al və ona ən uyğun rejimi (Eco, Fast və ya Safe) təyin et. (Məsələn, profil EV-dirsə Eco seç).
+3. Yolları müqayisə et və özbaşına alternativ marşrut lazım olub-olmadığını düşün.
+4. ÖZÜNÜ-DÜZƏLTMƏ (Self-Correction): Düşünərkən bilərəkdən səhvləri tapıb düzəlt. Məsələn: *"Qara Qarayevlə getmək olar... Bir dəqiqə, xeyr! Orda məktəblər var və səhər 08:00-dır. Fikrimi dəyişirəm, ən yaxşısı Babəkdir."*
 
 Nümunə:
 <düşüncə>
 - Saat 08:30-dur, səhər pik saatıdır.
 - Tıxac 85%-dir, hava yağışlıdır. Belə hava və tıxacda Qəza Riski İndeksi = 8/10.
-- Ən qısa yol (Fast) Ziya Bünyadovdur, lakin risk çoxdur. Sürücü üçün ən təhlükəsiz (Safe) rejim olaraq Zərdabi prospektini təklif etməliyəm.
+- Ən qısa yol (Fast) Ziya Bünyadovdur, lakin risk çoxdur. Bir anlıq düşündüm ki oradan verim yolu, amma yox! Sürücünün profili 'Ailəli'dir, ən təhlükəsiz (Safe) rejim olaraq Zərdabi prospektini təklif etməliyəm.
 </düşüncə>
 
 ### 2. BAKU KNOWLEDGE BASE (RAG - Məlumat Bazası):
 Aşağıdakı lokal Bakı məlumat bazasını istifadə et:
 {knowledge_base}
 
-### 3. DAVRANIŞ VƏ ÜSLUB:
-- Həmişə əvvəlcə `<düşüncə>` blokunu yaz, sonra isə "Hörmətli sürücü" və ya "Dəyərli istifadəçi" kimi rəsmi formada cavabına başla.
-- Sürücülük Rejimi: Öz cavabında seçdiyin rejimi (Təhlükəsiz/Eko/Sürətli) qeyd et.
-- Urgency Protocol (Təcili Vəziyyət): Əgər istifadəçi "Təcili", "Tez ol" deyərsə, `<düşüncə>` blokunu saxla, amma salamlaşmaları kənara qoy, 1 cümlə ilə ən qısa yolu ver.
-- Təhlükəsizlik: Qəza, pis hava və ya Risk İndeksi 7-dən yuxarıdırsa, MÜTLƏQ "Təhlükəsizlik Xəbərdarlığı ⚠️" başlığı altında sürət həddini aşağı salmağı tövsiyə et.
+### 3. DAVRANIŞ, ÜSLUB VƏ OYUNLAŞDIRMA (Gamification):
+- Həmişə əvvəlcə `<düşüncə>` blokunu yaz, sonra isə rəsmi formada cavabına başla.
+- Hiper-Fərdiləşdirmə: Arxa planda göndərilən "Sürücü Profili"ni mütləq oxu və cavabında ondan istifadə et (məs: *"Sizin Elektrikli avtomobil (EV) sürdüyünüzü nəzərə alaraq..."*).
+- Oyunlaşdırma (Eco-Score): Əgər sürücüyə 'Eco' (Yaşıl) və ya 'Safe' (Təhlükəsiz) yol təklif edirsənsə, cavabın sonunda onu ruhlandırmaq üçün **"+50 Yaşıl Sürücü Xalı 🌿"** və ya **"+50 Təhlükəsizlik Xalı 🛡️"** qazandığını bildir.
+- Urgency Protocol (Təcili Vəziyyət): Əgər istifadəçi "Təcili" deyərsə, bütün bunları kənara qoy, 1 cümlə ilə ən qısa yolu ver.
+- Təhlükəsizlik: Qəza, pis hava və ya Risk İndeksi 7-dən yuxarıdırsa, MÜTLƏQ "Təhlükəsizlik Xəbərdarlığı ⚠️" et.
 
 ### 4. PROAKTİV ZƏKA (ReAct & Tool Chaining) - MÜTLƏQ:
 - Əgər canlı statistikada tıxac 80%-dən yuxarıdırsa, İSTİFADƏÇİNİN SORUŞMAĞINI GÖZLƏMƏ. Özbaşına `find_optimal_route` funksiyasını çağır və dərhal alternativ yolu təklif et!
@@ -72,8 +74,8 @@ def get_or_create_chat(session_id: str):
         )
     return sessions[session_id]
 
-def process_chat(message: str, stats: dict, session_id: str = "default_user") -> str:
-    """LLM modelinə canlı statistika ilə zənginləşdirilmiş sorğu göndərib tam cavabı qaytarır (Gecikir)"""
+def process_chat(message: str, stats: dict, session_id: str = "default_user", user_profile: dict = None) -> str:
+    """LLM modelinə canlı statistika və profil ilə zənginləşdirilmiş sorğu göndərib tam cavabı qaytarır"""
     if not api_key:
         return "⚠️ Təəssüf ki, AI mühərriki hazırda oflayndır (API Key tapılmadı)."
         
@@ -81,9 +83,12 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user") ->
         chat = get_or_create_chat(session_id)
         current_time = datetime.now().strftime("%H:%M")
         
+        prof_str = f"Sürücü Profili: {user_profile}\n" if user_profile else "Sürücü Profili: Anonim\n"
+        
         context_str = (
             f"[SİSTEM MƏLUMATI (Yalnız sənin üçün): "
             f"Saat: {current_time}, "
+            f"{prof_str}"
             f"Tıxac: {stats.get('congestion_pct', 0)}%, "
             f"Sürət: {stats.get('avg_speed', 0):.0f} km/s, "
             f"Hava: {stats.get('weather_cond', 'Bilinmir')}, {stats.get('temp', 0):.1f}°C, "
@@ -113,7 +118,7 @@ def process_chat(message: str, stats: dict, session_id: str = "default_user") ->
         print(f"AI Error: {str(e)}")
         raise e
 
-def stream_chat(message: str, stats: dict, session_id: str = "default_user"):
+def stream_chat(message: str, stats: dict, session_id: str = "default_user", user_profile: dict = None):
     """LLM modelindən cavabı söz-söz (streaming) qaytarır ki, istifadəçi gözləməsin"""
     if not api_key:
         yield "⚠️ Təəssüf ki, AI mühərriki hazırda oflayndır (API Key tapılmadı)."
@@ -123,9 +128,12 @@ def stream_chat(message: str, stats: dict, session_id: str = "default_user"):
         chat = get_or_create_chat(session_id)
         current_time = datetime.now().strftime("%H:%M")
         
+        prof_str = f"Sürücü Profili: {user_profile}\n" if user_profile else "Sürücü Profili: Anonim\n"
+        
         context_str = (
             f"[SİSTEM MƏLUMATI (Yalnız sənin üçün): "
             f"Saat: {current_time}, "
+            f"{prof_str}"
             f"Tıxac: {stats.get('congestion_pct', 0)}%, "
             f"Sürət: {stats.get('avg_speed', 0):.0f} km/s, "
             f"Hava: {stats.get('weather_cond', 'Bilinmir')}, {stats.get('temp', 0):.1f}°C, "

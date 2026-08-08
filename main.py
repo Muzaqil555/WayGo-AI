@@ -23,6 +23,7 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     message: str
     session_id: str = "default_user"
+    user_profile: dict = None
     congestion_pct: int = 0
     avg_speed: float = 0.0
     active_vehicles: int = 0
@@ -50,7 +51,12 @@ async def chat_endpoint(request: ChatRequest):
             "anomaly_count": request.anomaly_count
         }
         
-        reply_text = process_chat(request.message, stats, request.session_id)
+        reply_text = process_chat(
+            message=request.message, 
+            stats=stats, 
+            session_id=request.session_id,
+            user_profile=request.user_profile
+        )
         return ChatResponse(reply=reply_text)
         
     except Exception as e:
@@ -74,7 +80,12 @@ async def chat_stream_endpoint(request: ChatRequest):
     
     # Server-Sent Events (SSE) və ya təmiz text axını
     return StreamingResponse(
-        stream_chat(request.message, stats, request.session_id), 
+        stream_chat(
+            message=request.message, 
+            stats=stats, 
+            session_id=request.session_id,
+            user_profile=request.user_profile
+        ), 
         media_type="text/plain"
     )
 
